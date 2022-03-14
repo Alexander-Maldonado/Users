@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from flask_app import app
 
 from flask import redirect, render_template, request
@@ -23,3 +24,37 @@ def add():
     print(request.form)
     User.save(request.form)
     return redirect ("/users")
+
+@app.route("/user/edit/<int:id>")
+def edit(id):
+    data={
+        "id":id
+    }
+    return render_template("edit.html", user=User.get_one(data))
+
+@app.route("/user/update", methods = ["POST"])
+def update():
+    User.update(request.form)
+    return redirect("/users")
+
+@app.route("/user/deleteconfirm/<int:id>")
+def confirm(id):
+    data={
+        "id":id
+    }
+    return render_template("delete.html", user=User.get_one(data))
+
+@app.route("/user/delete/<int:id>")
+def delete(id):
+    data ={
+        "id":id
+    }
+    User.delete(data)
+    return redirect("/users")
+
+@app.route("/user/view/<int:id>")
+def View(id):
+    data={
+        "id":id
+    }
+    return render_template("view.html", user=User.get_one(data))
